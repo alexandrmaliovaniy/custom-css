@@ -1,4 +1,5 @@
 $font = 18px;
 $width = 50%;
+$bg = #fff;
 
 @import 'src/resets.ccss';

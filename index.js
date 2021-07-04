@@ -60,24 +60,44 @@ function ApplyMixin(rawCode = '', mixin = {}) {
     })
 }
 
-// function GetScope(block = '') {
-//     let scope = 1;
-//     let start = block.indexOf("{");
-//     for (let i = start + 1; i < block.length; i++) {
-//         if (block[i] == '{') scope++;
-//         if (block[i] == "}") scope--;
-//         if (scope == 0) return block.slice(start + 1, i);
-//     }
-// }
+function GetScope(block = '') {
+    let scope = 1;
+    let scopeStart = block.search(/.+\s*{/);
+    let start = block.indexOf("{");
+    if (start == -1) return null;
+    for (let i = start + 1; i < block.length; i++) {
+        if (block[i] == '{') scope++;
+        if (block[i] == "}") scope--;
+        if (scope == 0) return {
+            raw: block.slice(scopeStart, i + 1),
+            body: block.slice(start+1, i)
+        };
+    }
+    return null;
+}
+function InspectScope(rawCode = '') {
+    const scopes = [];
+    let scope = null;
+    do {
+        scope = GetScope(rawCode);
+        if (scope) {
+            console.log(scope.raw);
+            scope.children = InspectScope(scope.body);
+            for (let i = 0; i < scope.children.length; i++) {
+                scope.body = scope.body.replace(scope.children[i].raw, '');
+            }
+            scopes.push(scope);
+            rawCode = rawCode.replace(scope.raw, '');
+        }
+    } while(scope);
+    return scopes;
+}
+function BuildScope(scopes = [], prefix = '') {
+    const styles = '';
+    for (let scope of scopes) {
 
-// function InspectScope(rawCode = '', parentScope) {
-//     const selectors = rawCode.match(/\s*.*\s*{/g);
-//     for (let selector of selectors) {
-//         const [str] = selector.match(/\s*.*\s*{/);
-//         const scope = GetScope(rawCode.slice())
-//         console.log(match);
-//     }
-// }
+    }
+}
 
 
 function ParseFile(rawCode) {
@@ -86,9 +106,8 @@ function ParseFile(rawCode) {
     const applyVars = ApplyVariables(variablesFree, variables);
     const {mixinFree, mixin} = LoadMixin(applyVars);
     const applyMixin = ApplyMixin(mixinFree, mixin);
-    console.log(applyMixin);
-    // InspectScope(applyVars)
-    // console.log(applyVars);
+    const scopes = InspectScope(applyMixin);
+    console.dir(scopes[2].children);
     return packedFile;
 }
 
