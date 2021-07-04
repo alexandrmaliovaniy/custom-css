@@ -37,15 +37,18 @@ function LoadVariables(rawCode = '') {
     return {variablesFree, variables};
 }
 function ApplyVariables(rawCode = '', variables = {}) {
-
+    return rawCode.replace(/:.*(\$[A-Za-z_]+)/g, e => {
+        const [, v] = e.match(/:.*(\$[A-Za-z_]+)/);
+        return e.replace(v, variables[v]) || "none";
+    })
 }
 
 
 function ParseFile(rawCode) {
     const packedFile = ApplyImports(rawCode);
     const {variablesFree, variables} = LoadVariables(packedFile);
-    console.log(variablesFree);
-    const applyVars = ApplyVariables(variablesFree);
+    const applyVars = ApplyVariables(variablesFree, variables);
+    console.log(applyVars);
     return packedFile;
 }
 
