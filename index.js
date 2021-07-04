@@ -29,11 +29,6 @@ function LoadVariables(rawCode = '') {
         variables[name] = value;
         return '';
     })
-    // const declarations = rawCode.match(/(\$[A-Za-z_]+)\s*=\s*(.+);/g);
-    // for (let v of declarations) {
-    //     const [, name, value] = v.match(/(\$[A-Za-z_]+)\s*=\s*(.+);/);
-    //     variables[name] = value;
-    // }
     return {variablesFree, variables};
 }
 function ApplyVariables(rawCode = '', variables = {}) {
@@ -55,7 +50,7 @@ function LoadMixin(rawCode = '') {
 
 function ApplyMixin(rawCode = '', mixin = {}) {
     return rawCode.replace(/@import\s+([A-Za-z-]*);/g, e => {
-        const [, mixname] = e.match(/@import\s+([A-Za-z-]*);/);
+        const [, mixname] = e.match(/@include\s+([A-Za-z-]*);/);
         return mixin[mixname];
     })
 }
