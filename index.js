@@ -81,7 +81,6 @@ function InspectScope(rawCode = '') {
     do {
         scope = GetScope(rawCode);
         if (scope) {
-            console.log(scope.raw);
             scope.children = InspectScope(scope.body);
             for (let i = 0; i < scope.children.length; i++) {
                 scope.body = scope.body.replace(scope.children[i].raw, '');
@@ -92,11 +91,23 @@ function InspectScope(rawCode = '') {
     } while(scope);
     return scopes;
 }
-function BuildScope(scopes = [], prefix = '') {
-    const styles = '';
-    for (let scope of scopes) {
 
+function ReduceWhitespaces(str) {
+    let i = str.length - 1;
+    while(str[i] == " ") i--;
+    return str.slice(0, i+1);
+}
+
+function BuildScope(scopes = [], prefix = '') {
+    let styles = '';
+    for (let scope of scopes) {
+        if (!scope) continue;
+        const [, selector] = scope.raw.match(/\s*(.+)\s*{/);
+        const unwrap = selector.indexOf('&') == -1 ? ReduceWhitespaces(prefix + " " + selector) : selector.replace('&', prefix);
+        styles += `${unwrap}{${scope.body.trim()}}`;
+        styles += BuildScope(scope.children, unwrap);
     }
+    return styles;
 }
 
 
@@ -107,8 +118,8 @@ function ParseFile(rawCode) {
     const {mixinFree, mixin} = LoadMixin(applyVars);
     const applyMixin = ApplyMixin(mixinFree, mixin);
     const scopes = InspectScope(applyMixin);
-    console.dir(scopes[2].children);
-    return packedFile;
+    const css = BuildScope(scopes);
+    return css;
 }
 
 
