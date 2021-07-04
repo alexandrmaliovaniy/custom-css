@@ -49,7 +49,7 @@ function LoadMixin(rawCode = '') {
 }
 
 function ApplyMixin(rawCode = '', mixin = {}) {
-    return rawCode.replace(/@import\s+([A-Za-z-]*);/g, e => {
+    return rawCode.replace(/@include\s+([A-Za-z-]*);/g, e => {
         const [, mixname] = e.match(/@include\s+([A-Za-z-]*);/);
         return mixin[mixname];
     })
