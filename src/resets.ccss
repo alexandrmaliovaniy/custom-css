@@ -7,8 +7,11 @@ body {
     font-size: $font;
 }
 
-@mixin flex {
-    display: flex;
+@mixin center {
     justify-content: center;
     align-items: center;
+}
+@mixin flex {
+    @include center;
+    display: flex;
 }

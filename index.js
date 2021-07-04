@@ -40,8 +40,8 @@ function ApplyVariables(rawCode = '', variables = {}) {
 
 function LoadMixin(rawCode = '') {
     const mixin = {};
-    const mixinFree = rawCode.replace(/@mixin\s+([A-Za-z-]+)\s*{([A-Za-z-+\/*:0-9\n\s;\'\".,]*)}/g, e => {
-        const [, name, body] = e.match(/@mixin\s+([A-Za-z-]+)\s*{([A-Za-z-+\/*:0-9\n\s;\'\".,]*)}/);
+    const mixinFree = rawCode.replace(/@mixin\s+([A-Za-z-]+)\s*{([A-Za-z-+\/*:0-9\n\s;\'\".,@]*)}/g, e => {
+        const [, name, body] = e.match(/@mixin\s+([A-Za-z-]+)\s*{([A-Za-z-+\/*:0-9\n\s;\'\".,@]*)}/);
         mixin[name] = body;
         return "";
     })
@@ -51,7 +51,7 @@ function LoadMixin(rawCode = '') {
 function ApplyMixin(rawCode = '', mixin = {}) {
     return rawCode.replace(/@include\s+([A-Za-z-]*);/g, e => {
         const [, mixname] = e.match(/@include\s+([A-Za-z-]*);/);
-        return mixin[mixname];
+        return ApplyMixin(mixin[mixname], mixin);
     })
 }
 
