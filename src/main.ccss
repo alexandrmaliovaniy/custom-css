@@ -1,4 +1,6 @@
 @import 'src/var.ccss';
 
-...
-some styles here
+
+#wrapper {
+    widht: $width;
+}

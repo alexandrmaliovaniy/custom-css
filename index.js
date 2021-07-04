@@ -22,13 +22,30 @@ function ApplyImports(rawCode = '') {
     })
 }
 
-function LoadVariables(rawCode) {
+function LoadVariables(rawCode = '') {
     const variables = {};
+    const variablesFree = rawCode.replace(/(\$[A-Za-z_]+)\s*=\s*(.+);/g, e => {
+        const [, name, value] = e.match(/(\$[A-Za-z_]+)\s*=\s*(.+);/);
+        variables[name] = value;
+        return '';
+    })
+    // const declarations = rawCode.match(/(\$[A-Za-z_]+)\s*=\s*(.+);/g);
+    // for (let v of declarations) {
+    //     const [, name, value] = v.match(/(\$[A-Za-z_]+)\s*=\s*(.+);/);
+    //     variables[name] = value;
+    // }
+    return {variablesFree, variables};
 }
+function ApplyVariables(rawCode = '', variables = {}) {
+
+}
+
 
 function ParseFile(rawCode) {
     const packedFile = ApplyImports(rawCode);
-
+    const {variablesFree, variables} = LoadVariables(packedFile);
+    console.log(variablesFree);
+    const applyVars = ApplyVariables(variablesFree);
     return packedFile;
 }
 
@@ -37,4 +54,4 @@ const mainFile = ReadLocalFile(filePath);
 
 const out = ParseFile(mainFile);
 
-console.log(out);
+// console.log(out);
