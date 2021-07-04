@@ -53,6 +53,12 @@ function LoadMixin(rawCode = '') {
     return {mixin, mixinFree};
 }
 
+function ApplyMixin(rawCode = '', mixin = {}) {
+    return rawCode.replace(/@import\s+([A-Za-z-]*);/g, e => {
+        const [, mixname] = e.match(/@import\s+([A-Za-z-]*);/);
+        return mixin[mixname];
+    })
+}
 
 // function GetScope(block = '') {
 //     let scope = 1;
@@ -79,8 +85,8 @@ function ParseFile(rawCode) {
     const {variablesFree, variables} = LoadVariables(packedFile);
     const applyVars = ApplyVariables(variablesFree, variables);
     const {mixinFree, mixin} = LoadMixin(applyVars);
-    console.log(mixinFree);
-    console.log(mixin);
+    const applyMixin = ApplyMixin(mixinFree, mixin);
+    console.log(applyMixin);
     // InspectScope(applyVars)
     // console.log(applyVars);
     return packedFile;

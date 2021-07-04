@@ -2,5 +2,6 @@
 
 
 #wrapper {
+    @import flex;
     widht: $width;
 }
