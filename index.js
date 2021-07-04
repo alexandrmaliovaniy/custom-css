@@ -43,12 +43,46 @@ function ApplyVariables(rawCode = '', variables = {}) {
     })
 }
 
+function LoadMixin(rawCode = '') {
+    const mixin = {};
+    const mixinFree = rawCode.replace(/@mixin\s+([A-Za-z-]+)\s*{([A-Za-z-+\/*:0-9\n\s;\'\".,]*)}/g, e => {
+        const [, name, body] = e.match(/@mixin\s+([A-Za-z-]+)\s*{([A-Za-z-+\/*:0-9\n\s;\'\".,]*)}/);
+        mixin[name] = body;
+        return "";
+    })
+    return {mixin, mixinFree};
+}
+
+
+// function GetScope(block = '') {
+//     let scope = 1;
+//     let start = block.indexOf("{");
+//     for (let i = start + 1; i < block.length; i++) {
+//         if (block[i] == '{') scope++;
+//         if (block[i] == "}") scope--;
+//         if (scope == 0) return block.slice(start + 1, i);
+//     }
+// }
+
+// function InspectScope(rawCode = '', parentScope) {
+//     const selectors = rawCode.match(/\s*.*\s*{/g);
+//     for (let selector of selectors) {
+//         const [str] = selector.match(/\s*.*\s*{/);
+//         const scope = GetScope(rawCode.slice())
+//         console.log(match);
+//     }
+// }
+
 
 function ParseFile(rawCode) {
     const packedFile = ApplyImports(rawCode);
     const {variablesFree, variables} = LoadVariables(packedFile);
     const applyVars = ApplyVariables(variablesFree, variables);
-    console.log(applyVars);
+    const {mixinFree, mixin} = LoadMixin(applyVars);
+    console.log(mixinFree);
+    console.log(mixin);
+    // InspectScope(applyVars)
+    // console.log(applyVars);
     return packedFile;
 }
 
