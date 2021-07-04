@@ -2,7 +2,7 @@
 
 
 #wrapper {
-    @import flex;
+    @include flex;
     width: $width;
 
     &:hover {
@@ -14,7 +14,7 @@
     }
 
     a {
-        @import flex;
+        @include flex;
         color: #333;
 
         &::before {
