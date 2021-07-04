@@ -1,2 +1,4 @@
-yo
-sup
+@import 'src/var.ccss';
+
+...
+some styles here
