@@ -3,7 +3,7 @@
 
 #wrapper {
     @import flex;
-    widht: $width;
+    width: $width;
 
     &:hover {
         background: $bg;
@@ -11,5 +11,21 @@
 
     &:active {
         background: #000;
+    }
+
+    a {
+        @import flex;
+        color: #333;
+
+        &::before {
+            content: '<';
+            
+        }
+        &::after {
+            content: '>';
+        }
+        &::before, &::after {
+            color: #111;
+        }
     }
 }

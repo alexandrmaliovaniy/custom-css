@@ -103,7 +103,7 @@ function BuildScope(scopes = [], prefix = '') {
     for (let scope of scopes) {
         if (!scope) continue;
         const [, selector] = scope.raw.match(/\s*(.+)\s*{/);
-        const unwrap = selector.indexOf('&') == -1 ? ReduceWhitespaces(prefix + " " + selector) : selector.replace('&', prefix);
+        const unwrap = selector.indexOf('&') == -1 ? ReduceWhitespaces(prefix + " " + selector) : selector.replace(/&/g, prefix);
         styles += `${unwrap}{${scope.body.trim()}}`;
         styles += BuildScope(scope.children, unwrap);
     }
@@ -124,7 +124,5 @@ function ParseFile(rawCode) {
 
 
 const mainFile = ReadLocalFile(filePath);
-
 const out = ParseFile(mainFile);
-
-// console.log(out);
+WriteLocalFile(outFile, out);
