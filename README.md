@@ -2,22 +2,22 @@
 
 ---
 
-##Lounch
+#Lounch
 
 `$ node index /file.ccss /out.css`
 
 ****
 
-##Syntax
+#Syntax
 
-###Import
+#Import
 
 `@import '/file.ccss'`
 
 **PATH** is relative to index location
 
 
-###Variables 
+#Variables 
 
 `$variableName = value`;
 
@@ -29,7 +29,7 @@
     }
 ```
 
-###Mixin
+#Mixin
 
 ```
     @mixin name {
@@ -42,12 +42,12 @@
 
 ```
     selector {
-        @import name;
+        @include name;
         ...props
     }
 ```
 
-###Nesting
+#Nesting
 
 ```
     selector {
